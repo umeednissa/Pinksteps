@@ -11,6 +11,46 @@
         .urdu-text { font-family: 'Noto Nastaliq Urdu', serif; }
         .bg-pink-gradient { background: linear-gradient(135deg, #be185d 0%, #9f1239 100%); }
         .text-rose-gold { color: #fb7185; }
+
+        .pass-print-card {
+            width: 6in;
+            min-height: 6in;
+            box-sizing: border-box;
+        }
+
+        @media print {
+            @page {
+                size: 6in 6in;
+                margin: 0;
+            }
+
+            body {
+                background: white;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .pass-print-card, .pass-print-card * {
+                visibility: visible;
+            }
+
+            .pass-print-card {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 6in;
+                min-height: 6in;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0.25in !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-pink-600 selection:text-white scroll-smooth">
@@ -379,14 +419,24 @@
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-pink-200 mb-2">Participant category</label>
-                                <select id="regCategory" class="w-full bg-pink-950 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white">
-                                    <option value="General Supporter">General Supporter / Citizen</option>
-                                    <option value="Medical Professional / Student">Medical Professional / Student</option>
-                                    <option value="Cancer Survivor & Warrior">Cancer Survivor & Warrior</option>
-                                    <option value="Student / Youth Volunteer">Student / Youth Volunteer</option>
-                                </select>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-pink-200 mb-2">Gender *</label>
+                                    <select id="regGender" required class="w-full bg-pink-950 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white">
+                                        <option value="Female">Female</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Prefer not to say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-pink-200 mb-2">Participant category</label>
+                                    <select id="regCategory" class="w-full bg-pink-950 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white">
+                                        <option value="General Supporter">General Supporter / Citizen</option>
+                                        <option value="Medical Professional / Student">Medical Professional / Student</option>
+                                        <option value="Cancer Survivor & Warrior">Cancer Survivor & Warrior</option>
+                                        <option value="Student / Youth Volunteer">Student / Youth Volunteer</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="flex items-center space-x-3 pt-2">
@@ -399,41 +449,56 @@
                             </button>
                         </form>
 
-                        <div id="passContainer" class="hidden mt-8 bg-white text-slate-900 p-6 sm:p-8 rounded-2xl shadow-2xl">
-                            <div class="text-center border-b border-slate-200 pb-4 mb-4">
-                                <span class="text-xs uppercase font-extrabold bg-pink-100 text-pink-800 px-3 py-1 rounded-full">Official registration pass</span>
-                                <h3 class="text-2xl font-black text-pink-900 mt-2">Hope for Women Walk 2026</h3>
-                                <p class="text-xs text-slate-500">Presented by OMNIA</p>
+                        <div id="passContainer" class="pass-print-card hidden mt-8 bg-white text-slate-900 p-6 rounded-2xl shadow-2xl">
+                            <div class="text-center border-b border-slate-200 pb-3 mb-4">
+                                <span class="text-[10px] uppercase font-extrabold bg-pink-100 text-pink-800 px-2 py-1 rounded-full">Official registration pass</span>
+                                <h3 class="text-xl font-black text-pink-900 mt-2">Hope for Women</h3>
+                                <p class="text-[10px] text-slate-500">APPNA Medical Corps • 2026</p>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                            <div class="flex items-center justify-between gap-3 border-b border-slate-200 pb-3 mb-3">
                                 <div>
-                                    <span class="block text-xs text-slate-400 font-bold uppercase">Participant name</span>
-                                    <span id="passNameDisplay" class="font-bold text-slate-800 text-base"></span>
+                                    <span class="block text-[10px] uppercase text-slate-400 font-bold">Participant</span>
+                                    <span id="passNameDisplay" class="font-black text-slate-800 text-sm leading-tight"></span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-[10px] uppercase text-slate-400 font-bold">Chest</span>
+                                    <span id="passChestDisplay" class="font-black text-pink-700 text-lg"></span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] mb-3">
+                                <div>
+                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">ID</span>
+                                    <span id="passIdDisplay" class="font-bold text-pink-600 text-[11px]"></span>
                                 </div>
                                 <div>
-                                    <span class="block text-xs text-slate-400 font-bold uppercase">Registration ID</span>
-                                    <span id="passIdDisplay" class="font-bold text-pink-600 text-base"></span>
+                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">Gender</span>
+                                    <span id="passGenderDisplay" class="font-medium text-slate-800"></span>
                                 </div>
-                                <div>
-                                    <span class="block text-xs text-slate-400 font-bold uppercase">City / Location</span>
+                                <div class="col-span-2">
+                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">City / Location</span>
                                     <span id="passCityDisplay" class="font-medium text-slate-800"></span>
                                 </div>
-                                <div>
-                                    <span class="block text-xs text-slate-400 font-bold uppercase">Category</span>
+                                <div class="col-span-2">
+                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">Category</span>
                                     <span id="passCategoryDisplay" class="font-medium text-slate-800"></span>
                                 </div>
                             </div>
 
-                            <div class="bg-pink-50 border border-pink-200 rounded-xl p-4 text-center text-xs text-pink-900 font-medium mb-6">
-                                ✅ You are successfully registered! Please take a screenshot or print this pass. Admission is 100% free of cost.
+                            <div class="flex items-center justify-center mt-2 mb-3">
+                                <canvas id="passQrCode" width="120" height="120" class="border border-slate-200 rounded-lg bg-white"></canvas>
                             </div>
 
-                            <div class="flex gap-4">
-                                <button onclick="window.print()" class="flex-1 bg-pink-700 hover:bg-pink-800 text-white font-bold py-3 rounded-xl transition">
+                            <div class="bg-pink-50 border border-pink-200 rounded-xl p-2 text-center text-[10px] text-pink-900 font-medium">
+                                ✅ Scan at check-in • Admission is free.
+                            </div>
+
+                            <div class="no-print flex gap-3 mt-4">
+                                <button onclick="window.print()" class="flex-1 bg-pink-700 hover:bg-pink-800 text-white font-bold py-3 rounded-xl transition text-sm">
                                     Print / Save Pass
                                 </button>
-                                <button onclick="resetForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-3 rounded-xl transition">
+                                <button onclick="resetForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-3 rounded-xl transition text-sm">
                                     Register Another
                                 </button>
                             </div>
@@ -494,19 +559,52 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.0.0/build/qrcode.min.js"></script>
     <script>
+        function generateQrCode(payload) {
+            const canvas = document.getElementById('passQrCode');
+            if (!canvas || !window.QRCode) {
+                return;
+            }
+
+            QRCode.toCanvas(canvas, payload, {
+                width: 120,
+                margin: 1,
+                color: {
+                    dark: '#111827',
+                    light: '#ffffff'
+                }
+            }, function(error) {
+                if (error) console.error(error);
+            });
+        }
+
         function handleRegistration(event) {
             event.preventDefault();
 
             const name = document.getElementById('regName').value.trim();
             const city = document.getElementById('regCity').value;
+            const gender = document.getElementById('regGender').value;
             const category = document.getElementById('regCategory').value;
             const randomId = 'PK-HW-' + Math.floor(100000 + Math.random() * 900000);
+            const chestNumber = 'CH-' + String(Math.floor(100 + Math.random() * 900));
+            const payload = JSON.stringify({
+                id: randomId,
+                name,
+                gender,
+                city,
+                category,
+                chest: chestNumber
+            });
 
             document.getElementById('passNameDisplay').innerText = name;
             document.getElementById('passIdDisplay').innerText = randomId;
+            document.getElementById('passGenderDisplay').innerText = gender;
             document.getElementById('passCityDisplay').innerText = city;
             document.getElementById('passCategoryDisplay').innerText = category;
+            document.getElementById('passChestDisplay').innerText = chestNumber;
+
+            generateQrCode(payload);
 
             document.getElementById('walkRegistrationForm').classList.add('hidden');
             document.getElementById('passContainer').classList.remove('hidden');
