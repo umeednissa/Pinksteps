@@ -551,6 +551,13 @@
     </section>
 
     <div class="floating-socials" aria-label="Quick contact links">
+        <a href="mailto:umeed.nissa@gmail.com?subject=Sponsorship%20and%20Donations%20Inquiry" class="sponsor-float-btn" aria-label="Email us about sponsorship and donations">
+            <span class="sponsor-float-icon" aria-hidden="true">✉</span>
+            <span class="sponsor-float-copy">
+                <strong>Sponsor &amp; Donate</strong>
+                <small>Get in touch by email</small>
+            </span>
+        </a>
         <a href="https://www.facebook.com/hopeforwomen" target="_blank" rel="noopener noreferrer" class="social-float-btn facebook" aria-label="Facebook">
             f
         </a>
@@ -642,6 +649,56 @@
             background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
         }
 
+        .sponsor-float-btn {
+            min-height: 58px;
+            max-width: calc(100vw - 28px);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 8px 16px 8px 9px;
+            color: #ffffff;
+            background: linear-gradient(120deg, #be185d, #9f1239 60%, #7f1d1d);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            box-shadow: 0 12px 30px rgba(127, 29, 29, 0.32);
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .sponsor-float-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 34px rgba(127, 29, 29, 0.4);
+        }
+
+        .sponsor-float-icon {
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #9f1239;
+            background: #fff7ed;
+            font-size: 19px;
+        }
+
+        .sponsor-float-copy {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .sponsor-float-copy strong {
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .sponsor-float-copy small {
+            margin-top: 3px;
+            color: #ffe4e6;
+            font-size: 10px;
+        }
+
         @media (max-width: 640px) {
             .floating-socials {
                 right: 14px;
@@ -652,6 +709,18 @@
                 width: 48px;
                 height: 48px;
                 font-size: 20px;
+            }
+
+            .sponsor-float-btn {
+                min-height: 52px;
+                gap: 8px;
+                padding: 6px 13px 6px 7px;
+            }
+
+            .sponsor-float-icon {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
             }
         }
     </style>
