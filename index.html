@@ -18,8 +18,8 @@
         .text-rose-gold { color: #fb7185; }
 
         .pass-print-card {
-            width: min(100%, 32rem);
-            min-height: 28rem;
+            width: min(100%, 34rem);
+            min-height: 23rem;
             box-sizing: border-box;
             margin: 0 auto;
         }
@@ -27,14 +27,14 @@
         @media (max-width: 640px) {
             .pass-print-card {
                 width: min(100%, 24rem);
-                min-height: 24rem;
+                min-height: 20rem;
             }
         }
 
         @media print {
             @page {
-                size: 6in 6in;
-                margin: 0.12in;
+                size: A4 portrait;
+                margin: 12mm;
             }
 
             html, body {
@@ -53,21 +53,24 @@
                 opacity: 1 !important;
                 position: static !important;
                 margin: 0 auto !important;
-                width: 6in !important;
-                min-height: 6in !important;
-                border: none !important;
+                width: 100% !important;
+                max-width: 180mm !important;
+                min-height: auto !important;
+                border: 1px solid #f1d6df !important;
                 box-shadow: none !important;
-                padding: 0.2in !important;
-                border-radius: 0 !important;
+                padding: 8mm !important;
+                border-radius: 12px !important;
                 background: #ffffff !important;
+                page-break-inside: avoid;
             }
 
             .pass-print-card {
-                width: 6in !important;
-                min-height: 6in !important;
-                border: none !important;
+                width: 100% !important;
+                max-width: 180mm !important;
+                min-height: auto !important;
+                border: 1px solid #f1d6df !important;
                 box-shadow: none !important;
-                padding: 0.2in !important;
+                padding: 8mm !important;
                 margin: 0 auto !important;
                 background: #ffffff !important;
             }
