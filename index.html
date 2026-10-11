@@ -7,44 +7,73 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.5;
+        }
         .urdu-text { font-family: 'Noto Nastaliq Urdu', serif; }
         .bg-pink-gradient { background: linear-gradient(135deg, #be185d 0%, #9f1239 100%); }
         .text-rose-gold { color: #fb7185; }
 
         .pass-print-card {
-            width: 6in;
-            min-height: 6in;
+            width: min(100%, 32rem);
+            min-height: 28rem;
             box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .pass-print-card {
+                width: min(100%, 24rem);
+                min-height: 24rem;
+            }
         }
 
         @media print {
             @page {
                 size: 6in 6in;
-                margin: 0;
+                margin: 0.12in;
             }
 
-            body {
-                background: white;
+            html, body {
+                background: #ffffff !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
-            body * {
-                visibility: hidden;
+            body > *:not(#passContainer) {
+                display: none !important;
             }
 
-            .pass-print-card, .pass-print-card * {
-                visibility: visible;
+            #passContainer {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                position: static !important;
+                margin: 0 auto !important;
+                width: 6in !important;
+                min-height: 6in !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0.2in !important;
+                border-radius: 0 !important;
+                background: #ffffff !important;
             }
 
             .pass-print-card {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 6in;
-                min-height: 6in;
+                width: 6in !important;
+                min-height: 6in !important;
                 border: none !important;
                 box-shadow: none !important;
-                padding: 0.25in !important;
+                padding: 0.2in !important;
+                margin: 0 auto !important;
+                background: #ffffff !important;
+            }
+
+            .pass-print-card * {
+                visibility: visible !important;
             }
 
             .no-print {
@@ -460,54 +489,56 @@
                             </button>
                         </form>
 
-                        <div id="passContainer" class="pass-print-card hidden mt-8 bg-white text-slate-900 p-6 rounded-2xl shadow-2xl">
+                        <div id="passContainer" class="pass-print-card hidden mt-8 bg-white text-slate-900 p-5 rounded-3xl shadow-2xl border border-pink-100">
                             <div class="text-center border-b border-slate-200 pb-3 mb-4">
-                                <span class="text-[10px] uppercase font-extrabold bg-pink-100 text-pink-800 px-2 py-1 rounded-full">Official registration pass</span>
+                                <span class="inline-block text-[9px] uppercase font-extrabold bg-pink-100 text-pink-800 px-2 py-1 rounded-full tracking-[0.18em]">Participant pass</span>
                                 <h3 class="text-xl font-black text-pink-900 mt-2">Hope for Women</h3>
                                 <p class="text-[10px] text-slate-500">APPNA Medical Corps • 2026</p>
                             </div>
 
                             <div class="flex items-center justify-between gap-3 border-b border-slate-200 pb-3 mb-3">
-                                <div>
-                                    <span class="block text-[10px] uppercase text-slate-400 font-bold">Participant</span>
-                                    <span id="passNameDisplay" class="font-black text-slate-800 text-sm leading-tight"></span>
+                                <div class="min-w-0">
+                                    <span class="block text-[9px] uppercase text-slate-400 font-bold">Participant</span>
+                                    <span id="passNameDisplay" class="font-black text-slate-800 text-sm leading-tight break-words"></span>
                                 </div>
-                                <div class="text-right">
-                                    <span class="block text-[10px] uppercase text-slate-400 font-bold">Chest</span>
+                                <div class="text-right shrink-0">
+                                    <span class="block text-[9px] uppercase text-slate-400 font-bold">Chest</span>
                                     <span id="passChestDisplay" class="font-black text-pink-700 text-lg"></span>
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-2 text-[11px] mb-3">
-                                <div>
-                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">ID</span>
-                                    <span id="passIdDisplay" class="font-bold text-pink-600 text-[11px]"></span>
+                            <div class="grid grid-cols-2 gap-3 text-[11px] mb-3">
+                                <div class="rounded-xl bg-slate-50 p-2 border border-slate-100">
+                                    <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-[0.18em]">ID</span>
+                                    <span id="passIdDisplay" class="font-bold text-pink-600 text-[11px] break-all"></span>
                                 </div>
-                                <div>
-                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">Gender</span>
+                                <div class="rounded-xl bg-slate-50 p-2 border border-slate-100">
+                                    <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-[0.18em]">Gender</span>
                                     <span id="passGenderDisplay" class="font-medium text-slate-800"></span>
                                 </div>
-                                <div class="col-span-2">
-                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">City / Location</span>
+                                <div class="col-span-2 rounded-xl bg-slate-50 p-2 border border-slate-100">
+                                    <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-[0.18em]">City / Region</span>
                                     <span id="passCityDisplay" class="font-medium text-slate-800"></span>
                                 </div>
-                                <div class="col-span-2">
-                                    <span class="block text-[9px] text-slate-400 font-bold uppercase">Category</span>
+                                <div class="col-span-2 rounded-xl bg-slate-50 p-2 border border-slate-100">
+                                    <span class="block text-[8px] text-slate-400 font-bold uppercase tracking-[0.18em]">Category</span>
                                     <span id="passCategoryDisplay" class="font-medium text-slate-800"></span>
                                 </div>
                             </div>
 
                             <div class="flex items-center justify-center mt-2 mb-3">
-                                <canvas id="passQrCode" width="120" height="120" class="border border-slate-200 rounded-lg bg-white"></canvas>
+                                <div class="rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+                                    <canvas id="passQrCode" width="120" height="120" class="block bg-white"></canvas>
+                                </div>
                             </div>
 
                             <div class="bg-pink-50 border border-pink-200 rounded-xl p-2 text-center text-[10px] text-pink-900 font-medium">
-                                ✅ Scan at check-in • Admission is free.
+                                Scan to verify participant details.
                             </div>
 
                             <div class="no-print flex gap-3 mt-4">
                                 <button onclick="window.print()" class="flex-1 bg-pink-700 hover:bg-pink-800 text-white font-bold py-3 rounded-xl transition text-sm">
-                                    Print / Save Pass
+                                    Print Pass
                                 </button>
                                 <button onclick="resetForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-3 rounded-xl transition text-sm">
                                     Register Another
