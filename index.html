@@ -520,6 +520,15 @@
         </div>
     </section>
 
+    <div class="floating-socials" aria-label="Quick contact links">
+        <a href="https://www.facebook.com/hopeforwomen" target="_blank" rel="noopener noreferrer" class="social-float-btn facebook" aria-label="Facebook">
+            f
+        </a>
+        <a href="https://instagram.com/umeed.nissa" target="_blank" rel="noopener noreferrer" class="social-float-btn instagram" aria-label="Instagram">
+            ◎
+        </a>
+    </div>
+
     <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
             <div>
@@ -567,6 +576,55 @@
         </div>
     </div>
 
+    <style>
+        .floating-socials {
+            position: fixed;
+            right: 18px;
+            bottom: 22px;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-float-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.18);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .social-float-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .social-float-btn.facebook {
+            background: linear-gradient(135deg, #1877f2, #0b5ed7);
+        }
+
+        .social-float-btn.instagram {
+            background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+        }
+
+        @media (max-width: 640px) {
+            .floating-socials {
+                right: 14px;
+                bottom: 14px;
+            }
+
+            .social-float-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.0.0/build/qrcode.min.js"></script>
     <script>
         function getTodayKey() {
