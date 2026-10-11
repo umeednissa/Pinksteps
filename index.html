@@ -16,6 +16,7 @@
         .urdu-text { font-family: 'Noto Nastaliq Urdu', serif; }
         .bg-pink-gradient { background: linear-gradient(135deg, #be185d 0%, #9f1239 100%); }
         .text-rose-gold { color: #fb7185; }
+        #printPassRoot { display: none; }
 
         .pass-print-card {
             width: min(100%, 34rem);
@@ -34,52 +35,45 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 12mm;
+                margin: 0;
             }
 
             html, body {
                 background: #ffffff !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
             }
 
-            body > *:not(#passContainer) {
+            body > *:not(#printPassRoot) {
                 display: none !important;
             }
 
-            #passContainer {
+            #printPassRoot {
                 display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                position: static !important;
-                margin: 0 auto !important;
-                width: 100% !important;
-                max-width: 180mm !important;
-                min-height: auto !important;
+                position: absolute !important;
+                left: 15mm !important;
+                top: 15mm !important;
+                width: 180mm !important;
+                color: #111827 !important;
+            }
+
+            #printPassRoot .pass-print-card {
+                display: block !important;
+                width: 180mm !important;
+                min-height: 0 !important;
+                max-width: none !important;
                 border: 1px solid #f1d6df !important;
                 box-shadow: none !important;
-                padding: 8mm !important;
-                border-radius: 12px !important;
+                padding: 9mm !important;
+                margin: 0 !important;
                 background: #ffffff !important;
-                page-break-inside: avoid;
+                border-radius: 4mm !important;
+                page-break-inside: avoid !important;
             }
 
-            .pass-print-card {
-                width: 100% !important;
-                max-width: 180mm !important;
-                min-height: auto !important;
-                border: 1px solid #f1d6df !important;
-                box-shadow: none !important;
-                padding: 8mm !important;
-                margin: 0 auto !important;
-                background: #ffffff !important;
-            }
-
-            .pass-print-card * {
-                visibility: visible !important;
-            }
-
-            .no-print {
+            #printPassRoot .no-print {
                 display: none !important;
             }
         }
@@ -540,13 +534,15 @@
                             </div>
 
                             <div class="no-print flex gap-3 mt-4">
-                                <button onclick="window.print()" class="flex-1 bg-pink-700 hover:bg-pink-800 text-white font-bold py-3 rounded-xl transition text-sm">
+                                <button type="button" onclick="downloadPassPdf()" class="flex-1 bg-pink-700 hover:bg-pink-800 text-white font-bold py-3 rounded-xl transition text-sm">
+                                    Download PDF
+                                </button>
+                                <button type="button" onclick="window.print()" class="flex-1 bg-white hover:bg-pink-50 text-pink-800 font-bold py-3 rounded-xl transition text-sm border border-pink-200">
                                     Print Pass
                                 </button>
-                                <button onclick="resetForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-3 rounded-xl transition text-sm">
-                                    Register Another
-                                </button>
                             </div>
+                            <p id="passDownloadStatus" class="no-print text-center text-xs text-slate-500 mt-2" role="status" aria-live="polite"></p>
+                            <button type="button" onclick="resetForm()" class="no-print mt-3 w-full text-sm font-semibold text-slate-500 hover:text-pink-700">Register another participant</button>
                         </div>
                     </div>
                 </div>
@@ -659,7 +655,9 @@
             }
         }
     </style>
+    <div id="printPassRoot" aria-hidden="true"></div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.0.0/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         function getTodayKey() {
             return new Date().toISOString().slice(0, 10);
@@ -688,9 +686,106 @@
             dailyCountEl.textContent = count;
         }
 
-        function generateQrCode(payload) {
+        function generatePassPdf(participant) {
+            const status = document.getElementById('passDownloadStatus');
+            if (!window.jspdf || !document.getElementById('passQrCode')) {
+                if (status) status.textContent = 'PDF could not be prepared. Use Print Pass and choose Save as PDF.';
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const x = 18;
+            const y = 24;
+            const width = 174;
+            const qrCanvas = document.getElementById('passQrCode');
+
+            pdf.setDrawColor(244, 190, 208);
+            pdf.setFillColor(255, 255, 255);
+            pdf.roundedRect(x, y, width, 153, 4, 4, 'FD');
+            pdf.setFillColor(157, 23, 77);
+            pdf.roundedRect(x, y, width, 25, 4, 4, 'F');
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(18);
+            pdf.text('HOPE FOR WOMEN', x + 9, y + 12);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(9);
+            pdf.text('PARTICIPANT REGISTRATION PASS', x + 9, y + 19);
+
+            pdf.setTextColor(31, 41, 55);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(16);
+            const nameLines = pdf.splitTextToSize(participant.name, 105);
+            pdf.text(nameLines, x + 9, y + 39);
+
+            const detailTop = y + 49 + Math.max(0, nameLines.length - 1) * 7;
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(10);
+            pdf.setTextColor(107, 114, 128);
+            pdf.text('REGISTRATION ID', x + 9, detailTop);
+            pdf.text('CHEST NUMBER', x + 9, detailTop + 14);
+            pdf.text('GENDER', x + 9, detailTop + 28);
+            pdf.text('CITY / REGION', x + 9, detailTop + 42);
+            pdf.text('CATEGORY', x + 9, detailTop + 56);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(31, 41, 55);
+            pdf.text(participant.id, x + 9, detailTop + 5);
+            pdf.text(participant.chest, x + 9, detailTop + 19);
+            pdf.text(participant.gender, x + 9, detailTop + 33);
+            pdf.text(pdf.splitTextToSize(participant.city, 85), x + 9, detailTop + 47);
+            pdf.text(pdf.splitTextToSize(participant.category, 85), x + 9, detailTop + 61);
+
+            pdf.addImage(qrCanvas.toDataURL('image/png'), 'PNG', x + 126, y + 48, 38, 38);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(8);
+            pdf.setTextColor(107, 114, 128);
+            pdf.text('Scan to verify participant details', x + 122, y + 92, { maxWidth: 47, align: 'center' });
+            pdf.setDrawColor(229, 231, 235);
+            pdf.line(x + 9, y + 137, x + width - 9, y + 137);
+            pdf.setFontSize(8);
+            pdf.text('APPNA Medical Corps  |  2026', x + 9, y + 145);
+
+            pdf.save('Hope-for-Women-' + participant.id + '.pdf');
+            if (status) status.textContent = 'Your pass PDF has been downloaded.';
+        }
+
+        function downloadPassPdf() {
+            const participant = window.currentPassParticipant;
+            if (participant) generatePassPdf(participant);
+        }
+
+        function preparePrintPass() {
+            const source = document.getElementById('passContainer');
+            const printRoot = document.getElementById('printPassRoot');
+            if (!source || !printRoot) return;
+
+            const printable = source.cloneNode(true);
+            printable.id = 'printPassCard';
+            printable.classList.remove('hidden', 'mt-8', 'shadow-2xl');
+            printable.querySelectorAll('.no-print').forEach((element) => element.remove());
+
+            const sourceQr = source.querySelector('#passQrCode');
+            const clonedQr = printable.querySelector('#passQrCode');
+            if (sourceQr && clonedQr) {
+                const qrImage = document.createElement('img');
+                qrImage.src = sourceQr.toDataURL('image/png');
+                qrImage.alt = 'Participant QR code';
+                qrImage.width = 160;
+                qrImage.height = 160;
+                qrImage.style.display = 'block';
+                qrImage.style.margin = '0 auto';
+                clonedQr.replaceWith(qrImage);
+            }
+
+            printRoot.replaceChildren(printable);
+        }
+
+        function generateQrCode(payload, participant) {
             const canvas = document.getElementById('passQrCode');
             if (!canvas || !window.QRCode) {
+                const status = document.getElementById('passDownloadStatus');
+                if (status) status.textContent = 'QR service unavailable. Please reload and register again.';
                 return;
             }
 
@@ -702,7 +797,11 @@
                     light: '#ffffff'
                 }
             }, function(error) {
-                if (error) console.error(error);
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+                generatePassPdf(participant);
             });
         }
 
@@ -713,8 +812,14 @@
             const city = document.getElementById('regCity').value;
             const gender = document.getElementById('regGender').value;
             const category = document.getElementById('regCategory').value;
-            const randomId = 'PK-HW-' + Math.floor(100000 + Math.random() * 900000);
-            const chestNumber = 'CH-' + String(Math.floor(100 + Math.random() * 900));
+            const participant = {
+                name,
+                gender,
+                city,
+                category,
+                id: 'PK-HW-' + Math.floor(100000 + Math.random() * 900000),
+                chest: 'CH-' + String(Math.floor(100 + Math.random() * 900))
+            };
             const todayKey = getTodayKey();
             const regData = getDailyRegistrationData();
             regData[todayKey] = (regData[todayKey] || 0) + 1;
@@ -722,22 +827,23 @@
             updateDailyRegistrationCounter();
 
             const payload = JSON.stringify({
-                id: randomId,
-                name,
-                gender,
-                city,
-                category,
-                chest: chestNumber
+                id: participant.id,
+                name: participant.name,
+                gender: participant.gender,
+                city: participant.city,
+                category: participant.category,
+                chest: participant.chest
             });
 
-            document.getElementById('passNameDisplay').innerText = name;
-            document.getElementById('passIdDisplay').innerText = randomId;
-            document.getElementById('passGenderDisplay').innerText = gender;
-            document.getElementById('passCityDisplay').innerText = city;
-            document.getElementById('passCategoryDisplay').innerText = category;
-            document.getElementById('passChestDisplay').innerText = chestNumber;
+            window.currentPassParticipant = participant;
+            document.getElementById('passNameDisplay').innerText = participant.name;
+            document.getElementById('passIdDisplay').innerText = participant.id;
+            document.getElementById('passGenderDisplay').innerText = participant.gender;
+            document.getElementById('passCityDisplay').innerText = participant.city;
+            document.getElementById('passCategoryDisplay').innerText = participant.category;
+            document.getElementById('passChestDisplay').innerText = participant.chest;
 
-            generateQrCode(payload);
+            generateQrCode(payload, participant);
 
             document.getElementById('walkRegistrationForm').classList.add('hidden');
             document.getElementById('passContainer').classList.remove('hidden');
@@ -748,8 +854,11 @@
             document.getElementById('walkRegistrationForm').reset();
             document.getElementById('passContainer').classList.add('hidden');
             document.getElementById('walkRegistrationForm').classList.remove('hidden');
+            window.currentPassParticipant = null;
             document.getElementById('walkRegistrationForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+
+        window.addEventListener('beforeprint', preparePrintPass);
 
         function openHostingModal() {
             document.getElementById('hostingModal').classList.remove('hidden');
