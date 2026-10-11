@@ -56,7 +56,7 @@
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-pink-600 selection:text-white scroll-smooth">
 
     <div class="bg-pink-900 text-pink-100 text-xs sm:text-sm py-2 px-4 text-center font-medium">
-        <span>🇵🇰 Nationwide Free Registration | Project by <strong class="text-white">APPNA Medical Corps</strong> | WhatsApp <strong class="text-white">+92 321 8278115</strong></span>
+        <span>🇵🇰 Nationwide Free Registration | Project by <strong class="text-white">APPNA Medical Corps</strong> | WhatsApp <strong class="text-white">+92 321 8278115</strong> | Email <strong class="text-white">umeed.nissa@gmail.com</strong></span>
     </div>
 
     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
@@ -128,6 +128,14 @@
                     <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-2 backdrop-blur-sm">
                         <span class="text-base">🤝</span>
                         <span>Community support</span>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl px-4 py-3 backdrop-blur-sm inline-flex items-center gap-3 shadow-lg shadow-pink-900/10">
+                    <div class="w-11 h-11 flex items-center justify-center rounded-full bg-pink-500/20 border border-pink-300/30 text-xl">📈</div>
+                    <div>
+                        <div class="text-[10px] uppercase tracking-[0.22em] text-pink-200 font-bold">Daily registrations</div>
+                        <div id="dailyRegistrationCount" class="text-2xl font-black text-white">0</div>
                     </div>
                 </div>
             </div>
@@ -381,9 +389,14 @@
                         <div class="text-center max-w-xl mx-auto mb-8">
                             <span class="bg-pink-800 text-pink-200 text-xs font-bold uppercase px-3 py-1 rounded-full border border-pink-500/30">Free registration</span>
                             <h2 class="text-3xl font-black mt-4">Breast Cancer Awareness Walk</h2>
-                            <p class="text-pink-100 text-sm mt-2">Open to all citizens across Pakistan. Register below to generate your pass instantly.</p>                            <p class="text-pink-100 text-sm mt-3 font-medium">
+                            <p class="text-pink-100 text-sm mt-2">Open to all citizens across Pakistan. Register below to generate your pass instantly.</p>
+                            <p class="text-pink-100 text-sm mt-3 font-medium">
                                 Contact: <a href="https://wa.me/923218278115" class="text-white underline underline-offset-2">+92 321 8278115</a>
-                            </p>                        </div>
+                            </p>
+                            <p class="text-pink-100 text-sm mt-1 font-medium">
+                                Email: <a href="mailto:umeed.nissa@gmail.com" class="text-white underline underline-offset-2">umeed.nissa@gmail.com</a>
+                            </p>
+                        </div>
 
                         <form id="walkRegistrationForm" onsubmit="handleRegistration(event)" class="space-y-6">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -517,7 +530,8 @@
             </div>
             <div class="text-xs text-slate-500">
                 © 2026 OMNIA. All Rights Reserved. Free of Cost Community Health Initiative.<br>
-                WhatsApp: <a href="https://wa.me/923218278115" class="text-pink-400 hover:text-pink-300" target="_blank" rel="noopener noreferrer">+92 321 8278115</a>
+                WhatsApp: <a href="https://wa.me/923218278115" class="text-pink-400 hover:text-pink-300" target="_blank" rel="noopener noreferrer">+92 321 8278115</a><br>
+                Email: <a href="mailto:umeed.nissa@gmail.com" class="text-pink-400 hover:text-pink-300">umeed.nissa@gmail.com</a>
             </div>
             <div>
                 <button onclick="openHostingModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-pink-400 px-4 py-2 rounded-lg border border-slate-700 transition">
@@ -561,6 +575,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.0.0/build/qrcode.min.js"></script>
     <script>
+        function getTodayKey() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function getDailyRegistrationData() {
+            try {
+                const raw = localStorage.getItem('hopeForWomenDailyRegistrations');
+                return raw ? JSON.parse(raw) : {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function setDailyRegistrationData(data) {
+            localStorage.setItem('hopeForWomenDailyRegistrations', JSON.stringify(data));
+        }
+
+        function updateDailyRegistrationCounter() {
+            const dailyCountEl = document.getElementById('dailyRegistrationCount');
+            if (!dailyCountEl) return;
+
+            const todayKey = getTodayKey();
+            const data = getDailyRegistrationData();
+            const count = data[todayKey] || 0;
+            dailyCountEl.textContent = count;
+        }
+
         function generateQrCode(payload) {
             const canvas = document.getElementById('passQrCode');
             if (!canvas || !window.QRCode) {
@@ -588,6 +629,12 @@
             const category = document.getElementById('regCategory').value;
             const randomId = 'PK-HW-' + Math.floor(100000 + Math.random() * 900000);
             const chestNumber = 'CH-' + String(Math.floor(100 + Math.random() * 900));
+            const todayKey = getTodayKey();
+            const regData = getDailyRegistrationData();
+            regData[todayKey] = (regData[todayKey] || 0) + 1;
+            setDailyRegistrationData(regData);
+            updateDailyRegistrationCounter();
+
             const payload = JSON.stringify({
                 id: randomId,
                 name,
@@ -625,6 +672,8 @@
         function closeHostingModal() {
             document.getElementById('hostingModal').classList.add('hidden');
         }
+
+        document.addEventListener('DOMContentLoaded', updateDailyRegistrationCounter);
 
         document.querySelectorAll('.faq-button').forEach((button) => {
             button.addEventListener('click', () => {
