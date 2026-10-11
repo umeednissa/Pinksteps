@@ -18,6 +18,100 @@
         .text-rose-gold { color: #fb7185; }
         #printPassRoot { display: none; }
 
+        .event-theme-karachi { --event-color: #be185d; --event-tint: #fff1f2; }
+        .event-theme-lahore { --event-color: #047857; --event-tint: #ecfdf5; }
+        .event-theme-seminar { --event-color: #b45309; --event-tint: #fffbeb; }
+
+        .event-choice {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            background: #ffffff;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .event-choice:hover { transform: translateY(-2px); }
+        .event-choice:has(input:checked) {
+            border-color: var(--event-color);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--event-color) 22%, transparent), 0 10px 22px rgba(15, 23, 42, 0.12);
+        }
+        .event-choice:has(input:focus-visible) { outline: 3px solid #ffffff; outline-offset: 2px; }
+        .event-choice input {
+            position: absolute;
+            z-index: 2;
+            top: 15px;
+            right: 15px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--event-color);
+        }
+
+        .event-art {
+            position: relative;
+            isolation: isolate;
+            height: 86px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            gap: 7px;
+            padding: 9px 10px;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+        .event-art::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            right: 13px;
+            bottom: -26px;
+            width: 82px;
+            height: 82px;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 50%;
+            box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.08), 0 0 0 22px rgba(255, 255, 255, 0.07);
+        }
+        .event-art strong { font-size: 34px; line-height: 0.95; font-weight: 800; }
+        .event-art small { padding-bottom: 3px; font-size: 9px; font-weight: 800; letter-spacing: 0.12em; }
+        .event-art-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+        }
+        .event-art-karachi { background: linear-gradient(125deg, #831843, #be185d 58%, #fb7185); }
+        .event-art-lahore { background: linear-gradient(125deg, #064e3b, #047857 58%, #34d399); }
+        .event-art-seminar { background: linear-gradient(125deg, #78350f, #b45309 58%, #fbbf24); }
+        .event-choice-title { color: #0f172a; font-size: 12px; font-weight: 800; line-height: 1.25; }
+        .event-choice-date { color: #64748b; font-size: 10px; line-height: 1.3; }
+
+        .event-pass-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 0 0 12px;
+            padding: 9px 11px;
+            border: 1px solid color-mix(in srgb, var(--event-color) 25%, white);
+            border-radius: 10px;
+            color: var(--event-color);
+            background: var(--event-tint);
+        }
+        .event-pass-name { font-size: 11px; font-weight: 800; }
+        .event-pass-date { font-size: 10px; font-weight: 700; text-align: right; }
+        #passContainer.event-theme-karachi #passChestDisplay,
+        #passContainer.event-theme-karachi #passIdDisplay { color: #be185d; }
+        #passContainer.event-theme-lahore #passChestDisplay,
+        #passContainer.event-theme-lahore #passIdDisplay { color: #047857; }
+        #passContainer.event-theme-seminar #passChestDisplay,
+        #passContainer.event-theme-seminar #passIdDisplay { color: #b45309; }
+
         .pass-print-card {
             width: min(100%, 34rem);
             min-height: 23rem;
@@ -379,14 +473,14 @@
                         Free registration
                     </div>
                     <h2 class="text-3xl font-black mt-6">Join the movement</h2>
-                    <p class="text-pink-100 mt-3 text-sm leading-relaxed">Secure your free entry, show your support, and help bring early detection awareness to communities throughout Pakistan.</p>
+                    <p class="text-pink-100 mt-3 text-sm leading-relaxed">Choose a walk or seminar, reserve your place, and help bring early detection awareness to communities throughout Pakistan.</p>
 
                     <div class="mt-8 space-y-4">
                         <div class="flex items-start gap-3">
                             <span class="text-xl">🎟️</span>
                             <div>
                                 <div class="font-bold">Instant digital pass</div>
-                                <div class="text-pink-100 text-sm">Receive your unique walk registration ID immediately after submission.</div>
+                                <div class="text-pink-100 text-sm">Receive your event pass and unique registration ID after submission.</div>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
@@ -412,8 +506,8 @@
                     <div class="relative z-10">
                         <div class="text-center max-w-xl mx-auto mb-8">
                             <span class="bg-pink-800 text-pink-200 text-xs font-bold uppercase px-3 py-1 rounded-full border border-pink-500/30">Free registration</span>
-                            <h2 class="text-3xl font-black mt-4">Breast Cancer Awareness Walk</h2>
-                            <p class="text-pink-100 text-sm mt-2">Open to all citizens across Pakistan. Register below to generate your pass instantly.</p>
+                            <h2 class="text-3xl font-black mt-4">Register for an event</h2>
+                            <p class="text-pink-100 text-sm mt-2">Choose one of the three dates below to generate your event-specific pass.</p>
                             <p class="text-pink-100 text-sm mt-3 font-medium">
                                 Contact: <a href="https://wa.me/923218278115" class="text-white underline underline-offset-2">+92 321 8278115</a>
                             </p>
@@ -423,6 +517,30 @@
                         </div>
 
                         <form id="walkRegistrationForm" onsubmit="handleRegistration(event)" class="space-y-6">
+                            <fieldset class="space-y-3">
+                                <legend class="block text-xs font-bold uppercase tracking-wider text-pink-200 mb-3">Choose your event *</legend>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <label class="event-choice event-theme-karachi">
+                                        <input type="radio" name="regEvent" value="karachi-walk" required aria-label="Karachi Walk, 31 October 2026">
+                                        <span class="event-art event-art-karachi" aria-hidden="true"><span class="event-art-label">CITY WALK</span><strong>31</strong><small>OCT 2026</small></span>
+                                        <span class="event-choice-title">Karachi Walk</span>
+                                        <span class="event-choice-date">Karachi · 31-10-2026</span>
+                                    </label>
+                                    <label class="event-choice event-theme-lahore">
+                                        <input type="radio" name="regEvent" value="lahore-walk" required aria-label="Lahore Walk, 7 November 2026">
+                                        <span class="event-art event-art-lahore" aria-hidden="true"><span class="event-art-label">CITY WALK</span><strong>07</strong><small>NOV 2026</small></span>
+                                        <span class="event-choice-title">Lahore Walk</span>
+                                        <span class="event-choice-date">Lahore · 7-11-2026</span>
+                                    </label>
+                                    <label class="event-choice event-theme-seminar">
+                                        <input type="radio" name="regEvent" value="aimc-seminar" required aria-label="Seminar at Allama Iqbal Medical College, 24 October 2026">
+                                        <span class="event-art event-art-seminar" aria-hidden="true"><span class="event-art-label">HEALTH SEMINAR</span><strong>24</strong><small>OCT 2026</small></span>
+                                        <span class="event-choice-title">Medical Awareness Seminar</span>
+                                        <span class="event-choice-date">Allama Iqbal Medical College · 24-10-2026</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-xs font-bold uppercase tracking-wider text-pink-200 mb-2">Full Name *</label>
@@ -482,7 +600,7 @@
                             </div>
 
                             <button type="submit" class="w-full bg-white text-pink-900 font-black py-4 rounded-xl shadow-xl hover:bg-pink-50 transition text-lg tracking-wide uppercase">
-                                Generate Free Walk Registration Pass
+                                Generate Event Pass
                             </button>
                         </form>
 
@@ -491,6 +609,10 @@
                                 <span class="inline-block text-[9px] uppercase font-extrabold bg-pink-100 text-pink-800 px-2 py-1 rounded-full tracking-[0.18em]">Participant pass</span>
                                 <h3 class="text-xl font-black text-pink-900 mt-2">Hope for Women</h3>
                                 <p class="text-[10px] text-slate-500">APPNA Medical Corps • 2026</p>
+                            </div>
+                            <div id="passEventBanner" class="event-pass-banner event-theme-karachi">
+                                <span id="passEventDisplay" class="event-pass-name">Karachi Walk</span>
+                                <span id="passEventDateDisplay" class="event-pass-date">31-10-2026</span>
                             </div>
 
                             <div class="flex items-center justify-between gap-3 border-b border-slate-200 pb-3 mb-3">
@@ -728,6 +850,33 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.0.0/build/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        const EVENTS = {
+            'karachi-walk': {
+                id: 'karachi-walk',
+                name: 'Karachi Walk',
+                date: '31-10-2026',
+                location: 'Karachi',
+                theme: 'event-theme-karachi',
+                rgb: [190, 24, 93]
+            },
+            'lahore-walk': {
+                id: 'lahore-walk',
+                name: 'Lahore Walk',
+                date: '7-11-2026',
+                location: 'Lahore',
+                theme: 'event-theme-lahore',
+                rgb: [4, 120, 87]
+            },
+            'aimc-seminar': {
+                id: 'aimc-seminar',
+                name: 'Allama Iqbal Medical College Seminar',
+                date: '24-10-2026',
+                location: 'Allama Iqbal Medical College',
+                theme: 'event-theme-seminar',
+                rgb: [180, 83, 9]
+            }
+        };
+
         function getTodayKey() {
             return new Date().toISOString().slice(0, 10);
         }
@@ -768,27 +917,31 @@
             const y = 24;
             const width = 174;
             const qrCanvas = document.getElementById('passQrCode');
+            const [eventRed, eventGreen, eventBlue] = participant.event.rgb;
 
-            pdf.setDrawColor(244, 190, 208);
+            pdf.setDrawColor(eventRed, eventGreen, eventBlue);
             pdf.setFillColor(255, 255, 255);
             pdf.roundedRect(x, y, width, 153, 4, 4, 'FD');
-            pdf.setFillColor(157, 23, 77);
-            pdf.roundedRect(x, y, width, 25, 4, 4, 'F');
+            pdf.setFillColor(eventRed, eventGreen, eventBlue);
+            pdf.roundedRect(x, y, width, 34, 4, 4, 'F');
             pdf.setTextColor(255, 255, 255);
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(18);
             pdf.text('HOPE FOR WOMEN', x + 9, y + 12);
             pdf.setFont('helvetica', 'normal');
             pdf.setFontSize(9);
-            pdf.text('PARTICIPANT REGISTRATION PASS', x + 9, y + 19);
+            pdf.text('PARTICIPANT REGISTRATION PASS', x + 9, y + 20);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(8);
+            pdf.text(participant.event.name + '  |  ' + participant.event.date, x + 9, y + 29, { maxWidth: width - 18 });
 
             pdf.setTextColor(31, 41, 55);
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(16);
             const nameLines = pdf.splitTextToSize(participant.name, 105);
-            pdf.text(nameLines, x + 9, y + 39);
+            pdf.text(nameLines, x + 9, y + 44);
 
-            const detailTop = y + 49 + Math.max(0, nameLines.length - 1) * 7;
+            const detailTop = y + 54 + Math.max(0, nameLines.length - 1) * 7;
             pdf.setFont('helvetica', 'normal');
             pdf.setFontSize(10);
             pdf.setTextColor(107, 114, 128);
@@ -805,7 +958,7 @@
             pdf.text(pdf.splitTextToSize(participant.city, 85), x + 9, detailTop + 47);
             pdf.text(pdf.splitTextToSize(participant.category, 85), x + 9, detailTop + 61);
 
-            pdf.addImage(qrCanvas.toDataURL('image/png'), 'PNG', x + 126, y + 48, 38, 38);
+            pdf.addImage(qrCanvas.toDataURL('image/png'), 'PNG', x + 126, y + 52, 38, 38);
             pdf.setFont('helvetica', 'normal');
             pdf.setFontSize(8);
             pdf.setTextColor(107, 114, 128);
@@ -881,11 +1034,13 @@
             const city = document.getElementById('regCity').value;
             const gender = document.getElementById('regGender').value;
             const category = document.getElementById('regCategory').value;
+            const selectedEventId = document.querySelector('input[name="regEvent"]:checked').value;
             const participant = {
                 name,
                 gender,
                 city,
                 category,
+                event: EVENTS[selectedEventId],
                 id: 'PK-HW-' + Math.floor(100000 + Math.random() * 900000),
                 chest: 'CH-' + String(Math.floor(100 + Math.random() * 900))
             };
@@ -901,10 +1056,28 @@
                 gender: participant.gender,
                 city: participant.city,
                 category: participant.category,
-                chest: participant.chest
+                chest: participant.chest,
+                event: {
+                    id: participant.event.id,
+                    name: participant.event.name,
+                    date: participant.event.date,
+                    location: participant.event.location
+                }
             });
 
             window.currentPassParticipant = participant;
+            const passContainer = document.getElementById('passContainer');
+            ['event-theme-karachi', 'event-theme-lahore', 'event-theme-seminar'].forEach((theme) => {
+                passContainer.classList.remove(theme);
+            });
+            passContainer.classList.add(participant.event.theme);
+            const eventBanner = document.getElementById('passEventBanner');
+            ['event-theme-karachi', 'event-theme-lahore', 'event-theme-seminar'].forEach((theme) => {
+                eventBanner.classList.remove(theme);
+            });
+            eventBanner.classList.add(participant.event.theme);
+            document.getElementById('passEventDisplay').innerText = participant.event.name;
+            document.getElementById('passEventDateDisplay').innerText = participant.event.date;
             document.getElementById('passNameDisplay').innerText = participant.name;
             document.getElementById('passIdDisplay').innerText = participant.id;
             document.getElementById('passGenderDisplay').innerText = participant.gender;
@@ -915,8 +1088,8 @@
             generateQrCode(payload, participant);
 
             document.getElementById('walkRegistrationForm').classList.add('hidden');
-            document.getElementById('passContainer').classList.remove('hidden');
-            document.getElementById('passContainer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            passContainer.classList.remove('hidden');
+            passContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function resetForm() {
